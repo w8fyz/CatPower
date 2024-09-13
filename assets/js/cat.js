@@ -4,7 +4,7 @@ let favNav = document.getElementById("favorite-button-container");
 let mainNav = document.getElementById("main-button-container");
 
 if(localStorage.getItem("likes") == null) {
-    localStorage.setItem("likes", "{}");
+    localStorage.setItem("likes", "[]")
 }
 
 function playHeartAnimation(div) {
@@ -110,12 +110,6 @@ function retrieveLikedCats() {
     return parse;
 }
 
-function initLocalStorage() {
-    if(localStorage.getItem("likes") == null) {
-        localStorage.setItem("likes", JSON.stringify([]))
-    }
-}
-
 function retrieveCats(quantity) {
     showLoader();
     catContainer.innerHTML = "";
@@ -127,5 +121,4 @@ function retrieveCats(quantity) {
             removeLoader();
         });
 }
-initLocalStorage();
 retrieveCats(10)
