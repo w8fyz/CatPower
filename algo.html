@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>FyzLoveAlgorithms</h1>
+<h2>Tout les exercices d'algorithmes</h2>
+</body>
+<div id="container">
+  <div id="container-exo1">
+      <h3>Exo 1 :</h3>
+    <h3>Liste d'entrée :</h3>
+    <ul id="exo1-input-list">
+        <!-- Valeurs générées par JavaScript -->
+    </ul>
+    <input id="exo1-new-value" placeholder="Entrez une nouvelle valeur"><button onclick="exo1addToInput()">Ajouter</button><br/>
+      <br/><button onclick="exo1updateOutputList()">Executer</button>
+      <h3>Liste de sortie :</h3>
+      <ul id="exo1-output-list">
+          <!-- Valeurs générées par JavaScript -->
+      </ul>
+  </div>
+    <h1>------------------------------</h1>
+    <div id="container-exo2">
+        <h3>Exo 2 :</h3>
+        <p>Attention : Une map étant incompatible avec les doublons, si une valeur est plusieurs fois en input elle ne sera affichée qu'une fois dans le résultat.</p>
+        <h3>Liste d'entrée :</h3>
+        <ul id="exo2-input-list">
+            <!-- Valeurs générées par JavaScript -->
+        </ul>
+        <input id="exo2-new-value" maxlength="1" placeholder="Entrez une nouvelle valeur"><button onclick="exo2addToInput()">Ajouter</button><br/>
+        <br/><button onclick="exo2updateOutputMap()">Executer</button>
+        <h3>Map de sortie :</h3>
+        <ul id="exo2-output-list">
+            <!-- Valeurs générées par JavaScript -->
+        </ul>
+    </div>
+    <h1>------------------------------</h1>
+    <div id="container-exo3">
+        <h3>Exo 3 :</h3>
+        <h3>Objets d'entrée :</h3>
+        <ul id="exo3-input-list">
+            <!-- Valeurs générées par JavaScript -->
+        </ul>
+        <input id="exo3-new-value-product" placeholder="Nom du produit">
+        <input id="exo3-new-value-quantity" type="number" placeholder="Quantitée">
+        <input id="exo3-new-value-price" type="number" placeholder="Prix">
+        <br/>
+        <button onclick="exo3addToInput()">Ajouter</button><br/><br/>
+        <button onclick="exo3updateOutputPrice()">Executer</button>
+        <h3>Résultat :</h3>
+        <ul id="exo3-output-list">
+            <!-- Valeurs générées par JavaScript -->
+        </ul>
+    </div>
+</div>
+<script src="assets/js/exo1.js"></script>
+<script src="assets/js/exo2.js"></script>
+<script src="assets/js/exo3.js"></script>
+</html>
