@@ -47,6 +47,9 @@ function showLoader() {
 function isLiking(url) {
     let json = localStorage.getItem("likes");
     let likes = json ? JSON.parse(json) : [];
+    if (!Array.isArray(likes)) {
+        likes = [];
+    }
     return likes.includes(url);
 }
 
@@ -105,8 +108,12 @@ function retrieveLikedCats() {
         return cats;
     }
     return parse;
+}
 
-
+function initLocalStorage() {
+    if(localStorage.getItem("likes") == null) {
+        localStorage.setItem("likes", JSON.stringify([]))
+    }
 }
 
 function retrieveCats(quantity) {
@@ -120,5 +127,5 @@ function retrieveCats(quantity) {
             removeLoader();
         });
 }
-
+initLocalStorage();
 retrieveCats(10)
