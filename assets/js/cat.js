@@ -1,27 +1,29 @@
+
 let catContainer = document.getElementById("cat-container");
 let loader = document.getElementById("loader");
 let favNav = document.getElementById("favorite-button-container");
 let mainNav = document.getElementById("main-button-container");
 
-if(localStorage.getItem("likes") == null) {
-    localStorage.setItem("likes", "[]")
+if (localStorage.getItem("likes") == null) {
+    localStorage.setItem("likes", "[]");
 }
 
 function playHeartAnimation(div) {
-    div.querySelector(".heart-anim").style.animation = "fadeInOut 0.7s ease-in-out forwards";
+    let heart = div.querySelector(".heart-anim");
+    heart.style.animation = "none";
+    void heart.offsetWidth;
+    heart.style.animation = "fadeInOut 0.7s ease-in-out forwards";
 }
 
-
-
 function renderCat(image) {
-    let button = "";
-    if(isLiking(image)) {
-        button = '<button onclick="deleteLike(this)">Supprimer le like</button>';
-    } else {
-        button = '<button onclick="like(this)">Like</button>';
-    }
-    let html = '<div class="cat"><div class="heart-anim">♥</div><img src="'+image+'" alt="A cat image">'+button+'</div>'
-    catContainer.insertAdjacentHTML('beforeend', html);
+    let html = `
+        <div class="cat" ondblclick="toggleLike(this)">
+            <div class="heart-anim">♥</div>
+            <img src="${image}" alt="A cat image">
+        </div>
+    `;
+
+    catContainer.insertAdjacentHTML("beforeend", html);
 }
 
 function showMainButtons() {
@@ -47,50 +49,72 @@ function showLoader() {
 function isLiking(url) {
     let json = localStorage.getItem("likes");
     let likes = json ? JSON.parse(json) : [];
+
     if (!Array.isArray(likes)) {
         likes = [];
     }
+
     return likes.includes(url);
 }
 
-function like(elem) {
-    let image = elem.parentNode.querySelector('img');
-    playHeartAnimation(elem.parentNode);
-    let json = localStorage.getItem("likes");
-    let likes = json ? JSON.parse(json) : [];
-    if (!Array.isArray(likes)) {
-        likes = [];
+function toggleLike(card) {
+    let image = card.querySelector("img");
+
+    if (isLiking(image.src)) {
+        deleteLike(card);
+    } else {
+        like(card);
     }
-    likes.push(image.src);
-    localStorage.setItem("likes", JSON.stringify(likes))
-    elem.parentNode.insertAdjacentHTML('beforeend', '<button onclick="deleteLike(this)">Supprimer le like</button>');
-    elem.remove();
 }
 
-function deleteLike(elem) {
-    let image = elem.parentNode.querySelector('img');
-    elem.parentNode.querySelector(".heart-anim").style.animation = "";
+function like(card) {
+    let image = card.querySelector("img");
+
+    playHeartAnimation(card);
+
     let json = localStorage.getItem("likes");
     let likes = json ? JSON.parse(json) : [];
+
     if (!Array.isArray(likes)) {
         likes = [];
     }
+
+    if (!likes.includes(image.src)) {
+        likes.push(image.src);
+    }
+
+    localStorage.setItem("likes", JSON.stringify(likes));
+}
+
+function deleteLike(card) {
+    let image = card.querySelector("img");
+
+    card.querySelector(".heart-anim").style.animation = "";
+
+    let json = localStorage.getItem("likes");
+    let likes = json ? JSON.parse(json) : [];
+
+    if (!Array.isArray(likes)) {
+        likes = [];
+    }
+
     likes = likes.filter(item => item !== image.src);
-    localStorage.setItem("likes", JSON.stringify(likes))
-    elem.parentNode.insertAdjacentHTML('beforeend', '<button onclick="like(this)">Like</button>');
-    elem.remove();
+
+    localStorage.setItem("likes", JSON.stringify(likes));
 }
 
 function showLikes() {
     showFavButtons();
+
     let cats = retrieveLikedCats();
     catContainer.innerHTML = "";
+
     cats.forEach((cat) => {
         renderCat(cat);
-    })
-    if(cats.length === 0) {
-        catContainer.innerHTML = "";
-        catContainer.insertAdjacentHTML('beforeend', '<h2>Aucun like</h2>')
+    });
+
+    if (cats.length === 0) {
+        catContainer.innerHTML = "<h2>Aucun like</h2>";
     }
 }
 
@@ -102,23 +126,33 @@ function showCats() {
 function retrieveLikedCats() {
     let cats = [];
     let json = localStorage.getItem("likes");
-    let parse = JSON.parse(json);
+    let parse = json ? JSON.parse(json) : [];
+
     if (!Array.isArray(parse)) {
-        localStorage.setItem("likes", JSON.stringify(cats))
+        localStorage.setItem("likes", JSON.stringify(cats));
         return cats;
     }
+
     return parse;
 }
 
 function retrieveCats(quantity) {
     showLoader();
     catContainer.innerHTML = "";
-    fetch("https://api.thecatapi.com/v1/images/search?limit=" + quantity).then((response) => response.json())
+
+    fetch("https://api.thecatapi.com/v1/images/search?limit=" + quantity)
+        .then((response) => response.json())
         .then((cats) => {
             cats.forEach(cat => {
-                renderCat(cat.url, cat.id);
+                renderCat(cat.url);
             });
+
+            removeLoader();
+        })
+        .catch((error) => {
+            console.error("Error loading cats:", error);
             removeLoader();
         });
 }
-retrieveCats(10)
+
+retrieveCats(10);
